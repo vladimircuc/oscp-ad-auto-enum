@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/dragon.png" width="500">
+</p>
+
 # DragonMap
 
 `dragon-map.sh` is a Bash script designed for **Active Directory (AD) credentialed enumeration** in an assumed-breach scenario.  
