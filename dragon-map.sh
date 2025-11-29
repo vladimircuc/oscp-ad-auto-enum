@@ -2,10 +2,28 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+banner() {
+    clear
+    cat << 'EOF'
+
+██████╗ ██████╗  █████╗  ██████╗  ██████╗ ███╗   ██╗      ███╗   ███╗ █████╗ ██████╗ 
+██╔══██╗██╔══██╗██╔══██╗██╔════╝ ██╔═══██╗████╗  ██║      ████╗ ████║██╔══██╗██╔══██╗
+██║  ██║██████╔╝███████║██║  ███╗██║   ██║██╔██╗ ██║█████╗██╔████╔██║███████║██████╔╝
+██║  ██║██╔══██╗██╔══██║██║   ██║██║   ██║██║╚██╗██║╚════╝██║╚██╔╝██║██╔══██║██╔═══╝ 
+██████╔╝██║  ██║██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║      ██║ ╚═╝ ██║██║  ██║██║ 
+╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝      ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝ 
+
+EOF
+
+    echo -e "\e[32m[+] Dragon-Map initialized – mapping the target landscape...\e[0m"
+}
+
 if [ $# -ne 3 ]; then
     echo "Usage: $0 <targets.txt> <username> <password>"
     exit 1
 fi
+
+banner
 
 inputfile="$1"
 user="$2"
@@ -46,7 +64,7 @@ while read -r ip; do
     base_dn=""
 
     ############################################################
-    # 1) RUSTSCAN (TCP)
+    # 1) RUSTSCAN (TCP) — same style as oscp_enum.sh
     ############################################################
     raw_rust="$raw_dir/rust.txt"
     rust_cmd="rust -a \"$ip\" -- -A -v -oN \"$raw_rust\""
@@ -65,7 +83,7 @@ while read -r ip; do
     } > "$rust_out"
 
     ############################################################
-    # 2) UDP TOP-100 (nmap)
+    # 2) UDP TOP-100 (nmap) — same style as oscp_enum.sh
     ############################################################
     raw_udp="$raw_dir/udp.txt"
     udp_cmd="nmap -Pn -n \"$ip\" -sU --top-ports 100 -v -oN \"$raw_udp\""
@@ -100,7 +118,7 @@ while read -r ip; do
     udp_full="$(cat "$raw_udp" 2>/dev/null || true)"  # maybe useful for DNS over UDP
 
     ############################################################
-    # 5) SMB ENUM (with creds + nxc)
+    # 5) SMB ENUM (with creds + anon + nxc)
     ############################################################
     if echo "$services" | grep -E '\|smb|\|microsoft-ds|\|netbios' >/dev/null \
        || echo "$rust_full" | grep -E '^445/tcp\s+open|^139/tcp\s+open' >/dev/null; then
