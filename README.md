@@ -1,6 +1,6 @@
-# oscp-ad-auto-enum
+# DragonMap
 
-`oscp-ad-auto-enum.sh` is a Bash script designed for **Active Directory (AD) credentialed enumeration** in an assumed-breach scenario.  
+`dragon-map.sh` is a Bash script designed for **Active Directory (AD) credentialed enumeration** in an assumed-breach scenario.  
 It performs high-signal enumeration against SMB, RPC, LDAP, DNS, and related AD services using valid credentials, 
 and saves all output in an organized per-host folder structure with timestamps and full command history.
 
@@ -57,7 +57,7 @@ Ensure your PATH includes these tools.
 ## Usage
 
 ```bash
-chmod +x oscp-ad-auto-enum.sh
+chmod +x dragon-map.sh
 
 #targets.txt: one IP per line
 cat targets.txt
@@ -65,7 +65,7 @@ cat targets.txt
 192.168.1.20
 
 #Run with credentials from the directory where you want results saved
-./oscp-ad-auto-enum.sh targets.txt 'username' 'password'
+./dragon-map.sh targets.txt 'username' 'password'
 ```
 
 For each target X.X.X.X, the script creates:
